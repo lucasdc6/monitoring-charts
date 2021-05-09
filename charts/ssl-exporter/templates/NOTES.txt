@@ -1,0 +1,44 @@
+1. Get the application URL by running these commands:
+{{- $url := "" }}
+{{- if contains "NodePort" .Values.service.type }}
+{{- $url = "http://$NODE_IP:$NODE_PORT" }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "ssl-exporter.fullname" . }})
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.service.type }}
+{{- $url = "http://$SERVICE_IP:{{ .Values.service.port }}" }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "ssl-exporter.fullname" . }}'
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "ssl-exporter.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
+  echo http://$SERVICE_IP:{{ .Values.service.port }}
+{{- else if contains "ClusterIP" .Values.service.type }}
+{{- $url = "http://127.0.0.1:9219" }}
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "ssl-exporter.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+  echo "Visit http://127.0.0.1:9219 to use your application"
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 9219:$CONTAINER_PORT
+{{- end }}
+
+{{ if .Values.k8sCerts.enabled }}
+{{- $mountPath := default .Values.k8sCerts.path .Values.k8sCerts.mountPath }}
+╔══════════════════════════════════════════╗
+║             k8s certificates             ║
+╚══════════════════════════════════════════╝
+Enabled mount k8s certificates from nodes path
+"{{ .Values.k8sCerts.path }}" to "{{ $mountPath }}"
+at exporter
+
+Try scrape with:
+  curl "{{ $url }}/probe?module=file&target={{ $mountPath }}/**/*.crt"
+
+{{ if .Values.k8sCerts.serviceMonitor.enabled }}
+Or check at prometheus server
+{{- end }}
+{{- end }}
+
+{{ if .Values.kubeconfig.enabled }}
+╔══════════════════════════════════════════╗
+║                kubeconfig                ║
+╚══════════════════════════════════════════╝
+Available kubeconfig file at "{{ include "ssl-exporter.kubeconfig.path" . }}"
+{{- end }}

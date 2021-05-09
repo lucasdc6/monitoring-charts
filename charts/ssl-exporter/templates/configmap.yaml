@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ssl-exporter.fullname" . }}
+  labels:
+    {{- include "ssl-exporter.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    modules:
+      https:
+        prober: https
+      https_insecure:
+        prober: https
+        tls_config:
+          insecure_skip_verify: true
+      tcp:
+        prober: tcp
+      file:
+        prober: file
+      kubernetes:
+        prober: kubernetes
+      kubeconfig:
+        prober: kubeconfig
+      {{- if .Values.kubeconfig.enabled }}
+      kubernetes_kubeconfig:
+        prober: kubernetes
+        kubernetes:
+          kubeconfig: {{ include "ssl-exporter.kubeconfig.path" . }}
+      {{- end }}
+  {{- with .Values.config.extra }}
+  {{- toYaml . | nindent 6 }}
+  {{- end }}

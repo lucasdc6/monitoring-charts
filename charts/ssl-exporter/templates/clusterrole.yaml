@@ -1,0 +1,10 @@
+{{- if .Values.kubeconfig.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "ssl-exporter.fullname" . }}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list"]
+{{- end }}

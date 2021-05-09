@@ -1,0 +1,38 @@
+{{- if .Values.k8sCerts.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "ssl-exporter.k8sCerts.serviceMonitor" . }}
+  labels: {{- include "ssl-exporter.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{- include "ssl-exporter.labels" . | nindent 6 }}
+  endpoints:
+  - port: http
+    path: /probe
+    params:
+      {{- if .Values.k8sCerts.serviceMonitor.module }}
+      module: {{ toYaml .Values.k8sCerts.serviceMonitor.module | nindent 6 }}
+      {{ else }}
+      module:
+      - file
+      {{- end }}
+      {{- if .Values.k8sCerts.serviceMonitor.targets }}
+      target: {{ toYaml .Values.k8sCerts.serviceMonitor.targets | nindent 6 }}
+      {{ else }}
+      {{ $certsPath := default .Values.k8sCerts.path .Values.k8sCerts.mountPath -}}
+      target:
+      - "{{ $certsPath }}/**/*.crt"
+      {{- end }}
+    metricRelabelings:
+      - sourceLabels: [__address__]
+        regex: ^(.*):(.*)$
+        targetLabel: __address__
+        replacement: ${1}:9219
+      {{- range $item := .Values.k8sCerts.serviceMonitor.metricRelabelings }}
+      - {{- toYaml $item | nindent 8 }}
+      {{- end }}
+    {{- if .Values.k8sCerts.serviceMonitor.relabelings }}
+    relabelings: {{- toYaml .Values.k8sCerts.serviceMonitor.relabelings | nindent 8 }}
+    {{- end }}
+{{- end }}
