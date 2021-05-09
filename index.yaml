@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  ssl-exporter:
+  - apiVersion: v2
+    appVersion: v2.2.0
+    created: "2021-05-09T23:09:05.582158005Z"
+    description: Deploy the ssl-exporter
+    digest: 665e53f71b9704ae7e75951c7166155e7a92b4984439926d835c29192f2331db
+    name: ssl-exporter
+    type: application
+    urls:
+    - https://github.com/lucasdc6/monitoring-charts/releases/download/ssl-exporter-0.1.0/ssl-exporter-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-05-09T23:09:05.456828665Z"
