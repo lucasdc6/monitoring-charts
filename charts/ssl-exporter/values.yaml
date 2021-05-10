@@ -27,6 +27,13 @@ k8sCerts:
     targets: []
     metricRelabelings: []
     relabelings: []
+  dashboard:
+    # ConfigMap or CRD
+    type: "ConfigMap"
+    enabled: true
+    extraLabels:
+      # Default grafana label
+      grafana_dashboard: "1"
 
 kubeconfig:
   enabled: false
