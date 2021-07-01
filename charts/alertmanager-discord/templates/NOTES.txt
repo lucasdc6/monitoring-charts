@@ -1,0 +1,6 @@
+Configure the alertmanager:
+
+receivers:
+- name: 'discord_webhook'
+  webhook_configs:
+  - url: 'http://{{ include "alertmanager-discord.fullname" . }}:9094'
