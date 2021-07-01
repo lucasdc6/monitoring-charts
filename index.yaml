@@ -1,5 +1,27 @@
 apiVersion: v1
 entries:
+  alertmanager-discord:
+  - apiVersion: v2
+    appVersion: latest
+    created: "2021-07-01T00:33:33.970736168Z"
+    description: Deploy the alertmanager to discord webhook
+    digest: e0c14dbb6edaf783ead03a71f0fe8e950e96e7e0c8ffd83bfa727551359e7e0f
+    name: alertmanager-discord
+    type: application
+    urls:
+    - https://github.com/lucasdc6/monitoring-charts/releases/download/alertmanager-discord-0.1.0/alertmanager-discord-0.1.0.tgz
+    version: 0.1.0
+  pushprox:
+  - apiVersion: v2
+    appVersion: 0.1.0
+    created: "2021-07-01T00:33:34.124719979Z"
+    description: Proxy to allow Prometheus to scrape through NAT.
+    digest: 2697cc58f1757cbdfdce099ba3c4d7d303fe531746a9b03a4c369ea8fdbaada1
+    name: pushprox
+    type: application
+    urls:
+    - https://github.com/lucasdc6/monitoring-charts/releases/download/pushprox-0.1.0/pushprox-0.1.0.tgz
+    version: 0.1.0
   ssl-exporter:
   - apiVersion: v2
     appVersion: v2.2.0
