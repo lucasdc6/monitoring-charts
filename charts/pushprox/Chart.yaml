@@ -1,0 +1,6 @@
+apiVersion: v2
+name: pushprox
+description: Proxy to allow Prometheus to scrape through NAT.
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
