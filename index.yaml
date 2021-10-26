@@ -11,6 +11,17 @@ entries:
     urls:
     - https://github.com/lucasdc6/monitoring-charts/releases/download/alertmanager-discord-0.1.0/alertmanager-discord-0.1.0.tgz
     version: 0.1.0
+  ovirt-exporter:
+  - apiVersion: v2
+    appVersion: v0.9.1
+    created: "2021-10-26T14:26:11.591668727Z"
+    description: A Helm chart for Kubernetes
+    digest: d4cb5227006c2e1ec215befe4d00bd227973c89fa2ea4344e4558f1faaa589de
+    name: ovirt-exporter
+    type: application
+    urls:
+    - https://github.com/lucasdc6/monitoring-charts/releases/download/ovirt-exporter-0.1.0/ovirt-exporter-0.1.0.tgz
+    version: 0.1.0
   pushprox:
   - apiVersion: v2
     appVersion: 0.1.0
