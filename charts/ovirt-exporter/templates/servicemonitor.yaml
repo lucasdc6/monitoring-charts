@@ -1,0 +1,59 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  annotations: {{ toYaml .Values.serviceMonitor.annotations | nindent 4 }}
+  labels:
+    {{- include "ovirt-exporter.labels" . | nindent 4 }}
+    {{ toYaml .Values.serviceMonitor.extraLabels | nindent 4 }}
+  name: {{ include "ovirt-exporter.fullname" . }}
+spec:
+  {{- with .Values.serviceMonitor.jobLabel }}
+  jobLabel: {{ . | quote }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.targetLabels }}
+  targetLabels: {{ toYaml . | nindent 6 }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.podTargetLabels }}
+  podTargetLabels: {{ toYaml . | nindent 6 }}
+  {{- end }}
+  endpoints:
+  - interval: 30s
+    port: http
+    {{- if .Values.serviceMonitor.endpoint.honorLabels }}
+    honorLabels: true
+    {{- end }}
+    {{- if .Values.serviceMonitor.endpoint.honorTimestamps }}
+    metricRelabelings: true
+    {{- end }}
+    {{- with .Values.serviceMonitor.endpoint.metricRelabelings }}
+    metricRelabelings: {{ toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.serviceMonitor.endpoint.relabelings }}
+    relabelings: {{ toYaml . | nindent 8 }}
+    {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "ovirt-exporter.labels" . | nindent 6 }}
+  {{- with .Values.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.targetLimit }}
+  targetLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.labelLimit }}
+  labelLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.labelNameLengthLimit }}
+  labelNameLengthLimit: {{ . }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.labelValueLengthLimit }}
+  labelValueLengthLimit: {{ . }}
+  {{- end }}
+{{- end }}
