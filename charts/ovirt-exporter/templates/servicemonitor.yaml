@@ -18,7 +18,10 @@ spec:
   podTargetLabels: {{ toYaml . | nindent 6 }}
   {{- end }}
   endpoints:
-  - interval: 30s
+  - interval: {{ default "30s" .Values.serviceMonitor.endpoint.interval }}
+    {{- with .Values.serviceMonitor.endpoint.scrapeTimeout }}
+    scrapeTimeout: {{ . }}
+    {{- end }}
     port: http
     {{- if .Values.serviceMonitor.endpoint.honorLabels }}
     honorLabels: true
