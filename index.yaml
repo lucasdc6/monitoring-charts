@@ -14,6 +14,16 @@ entries:
   ovirt-exporter:
   - apiVersion: v2
     appVersion: v0.9.1
+    created: "2022-01-19T17:03:39.365188715Z"
+    description: A Helm chart for Kubernetes
+    digest: 4f6f685494c75bff53aa50b2cb69c15452b3cad2a9d8a6db9a69adaf53aa2101
+    name: ovirt-exporter
+    type: application
+    urls:
+    - https://github.com/lucasdc6/monitoring-charts/releases/download/ovirt-exporter-0.1.1/ovirt-exporter-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v0.9.1
     created: "2021-10-26T14:26:11.591668727Z"
     description: A Helm chart for Kubernetes
     digest: d4cb5227006c2e1ec215befe4d00bd227973c89fa2ea4344e4558f1faaa589de
