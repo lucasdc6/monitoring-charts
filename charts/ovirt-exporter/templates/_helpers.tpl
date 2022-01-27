@@ -60,3 +60,25 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Create the name of the secret with the credentials
+*/}}
+{{- define "ovirt-exporter.secret.credentials.name" -}}
+{{- if not (and .Values.config.api.passwordSecret.name .Values.config.api.passwordSecret.key) }}
+{{- printf "%s-credentials" (include "ovirt-exporter.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- else }}
+{{- .Values.config.api.passwordSecret.name }}
+{{- end }}
+{{- end }}
+
+{{/*
+Create the path of the secret with the credentials
+*/}}
+{{- define "ovirt-exporter.secret.credentials.path" -}}
+{{- if not (and .Values.config.api.passwordSecret.name .Values.config.api.passwordSecret.key) }}
+{{- printf "/etc/ovirt_exporter/password" }}
+{{- else }}
+{{- printf "/etc/ovirt_exporter/%s" .Values.config.api.passwordSecret.key }}
+{{- end }}
+{{- end }}

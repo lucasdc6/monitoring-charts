@@ -47,7 +47,7 @@ spec:
             {{- end }}
             - -api.url={{ required "You must specify 'config.api.url'" .Values.config.api.url }}
             - -api.username={{ required "You must specify 'config.api.username'" .Values.config.api.username }}
-            - -api.password-file=/etc/ovirt_exporter/password
+            - -api.password-file={{- include "ovirt-exporter.secret.credentials.path" . }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -76,7 +76,7 @@ spec:
       volumes:
         - name: ovirt-password
           secret:
-            secretName: {{ include "ovirt-exporter.fullname" . }}-credentials
+            secretName: {{ include "ovirt-exporter.secret.credentials.name" . }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}

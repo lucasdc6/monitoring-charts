@@ -4,10 +4,14 @@
 
 config:
   api:
-    insecureCert: false
-    password: ""
     url: ""
+    insecureCert: false
     username: ""
+    password: ""
+    # Secret with ovirt password
+    passwordSecret:
+      name: ""
+      key: "password"
   debug: false
   metrics:
     disks: true
